@@ -1,5 +1,5 @@
 import * as React from 'react'
-import '../styles/globals.css'
+import '../../styles/globals.css'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
 

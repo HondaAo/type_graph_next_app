@@ -1,11 +1,26 @@
 import * as React from 'react' 
 import Head from "next/head";
 import Link from "next/link";
-
+import { FaUser } from 'react-icons/fa'
+import { MdMessage } from 'react-icons/md'
+import { FiSearch } from 'react-icons/fi'
+import { gql } from 'apollo-boost';
+import { Query } from 'react-apollo';
+import { MeQuery } from 'src/schemaTypes';
+import { GrLogin } from 'react-icons/gr'
 interface layoutProps {
     title: string,
     children: React.ReactNode
 }
+
+const meQuery = gql`
+ query MeQuery {
+     me {
+         id
+         email
+     }
+ }
+`;
 
 export const Layout: React.FC<layoutProps> = ({title, children}) =>{
         return (
@@ -22,9 +37,55 @@ export const Layout: React.FC<layoutProps> = ({title, children}) =>{
         );
 }
 
+const IsAuth = () => {
+    return (
+        <Query<MeQuery> query={meQuery}>
+         {({data, loading}) => {
+            if(loading){
+              return <div>Loading...</div>;
+            } 
+            if(!data){
+                return (
+                    <div className="flex">
+                        <GrLogin className="mr-6" />Login
+                    </div>
+                )
+            }
+
+            if(!data.me){
+                return (
+                    <div className="flex">
+                        <Link href="/user/login"><a>Login</a></Link>
+                    </div>
+                )
+            }
+
+            return (
+                <div className="flex">
+                  <div className="mr-6">Profile</div>
+                  <div>Message</div>
+                </div>   
+            )
+          }}
+        </Query>
+    );
+}
+
 const Header = () => {
     return (
-        <div className="">
+        <div className="flex items-center justify-between p-6 bg-black text-white">
+         <div className="flex ml-6 mr-6">
+             <Link href="/" ><a>Invite</a></Link>
+         </div>
+         <div className="bg-white p-1 ml-6 rounded w-60">
+           <div className="flex ">
+            <input type="text" placeholder="Search..." className="rounded-l-sm w-60 ml-2" />
+            <div className="bg-white text-gray-400 w-8">
+             <button><FiSearch /></button>
+            </div>
+           </div>
+          </div>
+         <IsAuth />
         </div>
     )
 }
