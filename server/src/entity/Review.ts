@@ -1,20 +1,19 @@
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
 
 @Entity()
-export class User extends BaseEntity{
+export class Review extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column("int")
+    user_id: number;
 
     @Column("text")
     name: string;
 
     @Column("text")
-    email: string;
+    text: string;
 
-    @Column("text")
-    password: number;
-
-    @Column("text", { default: "guest"})
-    type: string;
-
+    @Column("int")
+    star: number;
 }

@@ -7,6 +7,22 @@ export const typeDefs = gql`
      email: String!
      type: String!
  }
+ type HostInput {
+    name: String!
+    images: String[]!
+    comment: String!
+    price: Int!
+    beds: Int!
+    guests: Int!
+    latitude: Float!
+    longitude: Float!
+    amenities: [String!]!
+    reviews: Review[]
+    country: String!
+    city: String!
+    address: String!
+    tags: String[]
+ }
  type Query {
      me: User
  }
@@ -15,6 +31,7 @@ export const typeDefs = gql`
     login(email: String!, password: String!): User
     forgotPassword(email: String!): Boolean!
     changePassword(token: String!, password: String!): Boolean!
+    createPost(input: HostInput): Boolean!
  }
 `
 

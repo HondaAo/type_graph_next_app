@@ -5,6 +5,7 @@ import { redis } from "./redis";
 import { sendEmail } from "./utils/sendEmail";
 import { v4 } from 'uuid'
 import { forgotPasswordPrefix } from "./types";
+import { Host } from "./entity/Host";
 export const resolvers: IResolvers = {
     Query: {
         me: (_, __, { req }) => {
@@ -75,6 +76,14 @@ export const resolvers: IResolvers = {
             req.session.userId = user.id;
  
             return true;
+        },
+        registerHost: async(_, {input: { images, ...data}}, { req }) => {
+            const hosting = await Host.create({
+                ...data,
+                user_id: req.session.id
+            }).save()
+
+            return true
         }
     }
 }

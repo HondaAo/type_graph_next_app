@@ -73,18 +73,10 @@ const IsAuth = () => {
 
 const Header = () => {
     return (
-        <div className="flex items-center justify-between p-6 bg-black text-white">
-         <div className="flex ml-6 mr-6">
-             <Link href="/" ><a>Invite</a></Link>
+        <div className="flex items-center justify-between p-6 text-gray-500">
+         <div className="ml-6 mr-6">
+             <Link href="/" ><a className="font-extrabold">INVITE</a></Link>
          </div>
-         <div className="bg-white p-1 ml-6 rounded w-60">
-           <div className="flex ">
-            <input type="text" placeholder="Search..." className="rounded-l-sm w-60 ml-2" />
-            <div className="bg-white text-gray-400 w-8">
-             <button><FiSearch /></button>
-            </div>
-           </div>
-          </div>
          <IsAuth />
         </div>
     )
