@@ -6,6 +6,8 @@ import { sendEmail } from "./utils/sendEmail";
 import { v4 } from 'uuid'
 import { forgotPasswordPrefix } from "./types";
 import { Host } from "./entity/Host";
+import { UploadImage } from "./utils/cloudnary";
+
 export const resolvers: IResolvers = {
     Query: {
         me: (_, __, { req }) => {
@@ -13,11 +15,37 @@ export const resolvers: IResolvers = {
                 return null;
             }
             return User.findOne(req.session.userId);
+        },
+        listingPost: async(_, { id }) => {
+           const host = await Host.findOne(id)
+           if(host){
+               return host
+           }else {
+               return null
+           }
+        },
+        searchPost: async(_, { input }) => {
+            let hosts: Host[] = []
+            try{
+            const allSites = await Host.find()
+            for( let i=0; i < allSites.length; i++){
+                for( let x=0; x < allSites[i].tags.length; x++){
+                    if(allSites[i].tags[x] === input ){
+                        hosts.push(allSites[i])
+                    }
+                }
+            }
+            return hosts
+           }catch(err){
+               console.log(err)
+               return `Error: ${err.message}`
+           }
         }
     },
     Mutation: {
-        register: async(_, {name, email, password}) => {
+        register: async(_, {name, email, password, type}) => {
             const userEXists = await User.findOne({ where: { email } })
+            console.log(name)
             if(userEXists){
                 return false
             }
@@ -25,7 +53,8 @@ export const resolvers: IResolvers = {
             User.create({
                 name,
                 email,
-                password: hashedPassword
+                password: hashedPassword,
+                type
             }).save()
 
             return true
@@ -77,13 +106,42 @@ export const resolvers: IResolvers = {
  
             return true;
         },
-        registerHost: async(_, {input: { images, ...data}}, { req }) => {
-            const hosting = await Host.create({
-                ...data,
-                user_id: req.session.id
-            }).save()
-
-            return true
+        createPost: async(_, {input: { images, name, country, city, address, comment, price, beds, guests, latitude, longitude, amenities, reviews, tags}}, { req }) => {
+           try {
+            const imageUrls = await UploadImage(images)
+             const host = await Host.create({
+                images: imageUrls ,
+                user_id: req.session.userId, 
+                name,
+                country, 
+                city, 
+                address, 
+                comment, 
+                price, 
+                beds, 
+                guests, 
+                latitude, 
+                longitude, 
+                amenities, 
+                reviews, 
+                tags
+             }).save()
+            return "Registerd";
+           }catch(err){
+             console.error(err)
+             return `Error: ${err.message}`
+           }
+           
+        },
+        deletePost: async(_, { id }) => {
+            try{
+            const host = await Host.findOne(id)
+            host.remove()
+            return `Successufly removed from list.`
+           } catch(err){
+               console.error(err)
+               return `Error: ${err.message}`
+           }
         }
     }
 }

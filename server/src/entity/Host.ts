@@ -1,12 +1,12 @@
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany} from "typeorm";
 import { Review } from "./Review";
 
-@Entity()
+@Entity("hosts")
 export class Host extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column("int")
     user_id: number;
 
     @Column("text")
@@ -25,7 +25,7 @@ export class Host extends BaseEntity{
     comment: string;
 
     @Column("text")
-    images: string[];
+    images: string | string[];
 
     @Column("int") 
     price: number;
@@ -36,8 +36,8 @@ export class Host extends BaseEntity{
     @Column("int") 
     guests: number;
   
-    @Column("double precision") l
-    atitude: number;
+    @Column("double precision")
+    latitude: number;
   
     @Column("double precision") 
     longitude: number;

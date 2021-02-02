@@ -1,13 +1,12 @@
 import * as React from 'react' 
 import Head from "next/head";
 import Link from "next/link";
-import { FaUser } from 'react-icons/fa'
-import { MdMessage } from 'react-icons/md'
-import { FiSearch } from 'react-icons/fi'
+// import { FaUser } from 'react-icons/fa'
+// import { MdMessage } from 'react-icons/md'
+// import { FiSearch } from 'react-icons/fi'
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
 import { MeQuery } from 'src/schemaTypes';
-import { GrLogin } from 'react-icons/gr'
 interface layoutProps {
     title: string,
     children: React.ReactNode
@@ -30,9 +29,13 @@ export const Layout: React.FC<layoutProps> = ({title, children}) =>{
               <meta charSet="utf-8" />
               <meta name="viewport" content="initial-scale=1.0, width=device-width" />
              </Head>
-             <Header />
-             {children}
-             <Footer />
+             <div className="relative text-gray-500">
+              <Header />
+              <div >
+              {children}
+              </div>
+              <Footer />
+             </div>
             </>
         );
 }
@@ -47,23 +50,15 @@ const IsAuth = () => {
             if(!data){
                 return (
                     <div className="flex">
-                        <GrLogin className="mr-6" />Login
-                    </div>
-                )
-            }
-
-            if(!data.me){
-                return (
-                    <div className="flex">
                         <Link href="/user/login"><a>Login</a></Link>
                     </div>
                 )
             }
-
             return (
-                <div className="flex">
-                  <div className="mr-6">Profile</div>
-                  <div>Message</div>
+                <div className="flex mr-12" style={{ color: '#465280'}}>
+                  <Link href="/host"><a className="mr-8">Host</a></Link>
+                  <Link href="/user/account" ><a className="mr-8">Profile</a></Link>
+                  <Link href="/user/message" ><a className="mr-8">Message</a></Link>
                 </div>   
             )
           }}
@@ -73,8 +68,8 @@ const IsAuth = () => {
 
 const Header = () => {
     return (
-        <div className="flex items-center justify-between p-6 text-gray-500">
-         <div className="ml-6 mr-6">
+        <div className="flex items-center justify-between p-6 text-gray-500 border border border-gray-200 top-0 w-full z-50">
+         <div className="pl-24 mr-6">
              <Link href="/" ><a className="font-extrabold">INVITE</a></Link>
          </div>
          <IsAuth />
@@ -84,8 +79,12 @@ const Header = () => {
 
 const Footer = () => {
     return (
-        <div className="">
-
+        <div className="flex p-8 border border-gray-200 justify-between">
+            <div className="pl-24 font-extrabold">INVITE</div>
+            <div className="flex pr-24">
+                <Link href="/"><a className="mr-12">Privacy</a></Link>
+                <Link href="/"><a>SiteMap</a></Link>
+            </div>
         </div>
     )
 }

@@ -1,9 +1,10 @@
-import React, { useState } from 'react' 
+import React, { useEffect, useState } from 'react' 
 import { Layout } from 'src/components/layout';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost'
 import {useRouter} from 'next/router'
 import { LoginMutation, LoginMutationVariables } from '../../schemaTypes';
+import Link from 'next/link';
 
 interface loginProps {
 
@@ -21,23 +22,34 @@ const loginMutation = gql`
 const Login: React.FC<loginProps> = ({}) =>{
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
+    const [ message, setMessage ] = useState("")
     const router = useRouter();
+    console.log(document.cookie)
+    useEffect(() => {
+      
+    },[])
     return (
-        <Layout title="login page">
+        <Layout title="Login Page">
           <Mutation<LoginMutation, LoginMutationVariables> mutation={loginMutation}>
           {(mutate) => (
-          <div>
+          <div className="w-3/6 mx-auto my-20 p-12 border border-gray-200 box-shadow text-center">
            <form onSubmit={async(e) => {
                     e.preventDefault();
                     const res = await mutate({
                         variables: { email, password }
                     });
-                    console.log(res)
-                    router.push("/")
+                    if(res){
+                        router.push("/user/login")  
+                    }else {
+                        setMessage("Something went wrong, please check again")
+                    }
             }}>
-            <input type="text" placeholder="email" value={email} required onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="password" value={password} required onChange={(e) => setPassword(e.target.value)} />
-            <input type="submit" value="login" className="" />
+            <h1>Login with Email</h1>
+            {message && <p>{message}</p>}
+            <input type="text" placeholder="email" value={email} required onChange={(e) => setEmail(e.target.value)}  className="w-10/12 mx-auto border border-gray-200 box-shadow p-3 my-3" />
+            <input type="password" placeholder="password" value={password} required onChange={(e) => setPassword(e.target.value)} className="w-10/12 mx-auto border border-gray-200 box-shadow p-3 my-3" />
+            <input type="submit" value="login" className="w-3/12 mx-auto p-2 bg-blue-500 text-white" />
+            <p className="my-6">Not having an account? <Link href="/user/register"><a className="text-blue-300">Register page</a></Link></p>
            </form>
           </div>      
           )}        

@@ -7,6 +7,8 @@ import * as session from "express-session"
 import "dotenv/config"
 import { redis } from './redis'
 import * as connectRedis from 'connect-redis'
+import 'dotenv'
+
 const startServer = async () => {
 
     const server = new ApolloServer({

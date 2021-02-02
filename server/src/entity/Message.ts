@@ -10,16 +10,20 @@ import {
   
   @Entity("messages")
   export class Message extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid") id: string;
+    @PrimaryGeneratedColumn() 
+    id: number;
   
-    @Column("text") text: string;
+    @Column("text") 
+    text: string;
   
-    @Column("uuid") userId: string;
+    @Column("int") 
+    userId: number;
   
     @ManyToOne(() => User)
     user: User;
   
-    @Column("uuid") host_id: string;
+    @Column("int") 
+    host_id: number;
   
     @ManyToOne(() => Host)
     host: Host;

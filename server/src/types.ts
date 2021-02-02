@@ -7,9 +7,17 @@ export const typeDefs = gql`
      email: String!
      type: String!
  }
- type HostInput {
+ input Review {
+     id: Int!,
+     user_id: Int!,
+     name: String!,
+     text: String!,
+     star: Int!
+ }
+ type ListingAccommdation {
+    id: ID!,
     name: String!
-    images: String[]!
+    images: [String!]!
     comment: String!
     price: Int!
     beds: Int!
@@ -17,21 +25,40 @@ export const typeDefs = gql`
     latitude: Float!
     longitude: Float!
     amenities: [String!]!
-    reviews: Review[]
     country: String!
     city: String!
     address: String!
-    tags: String[]
+    tags: [String!]!
+    user_id: Int!
+ }
+ input HostInput {
+    name: String!
+    images: [String!]!
+    comment: String!
+    price: Int!
+    beds: Int!
+    guests: Int!
+    latitude: Float!
+    longitude: Float!
+    amenities: [String!]!
+    reviews: [Review]
+    country: String!
+    city: String!
+    address: String!
+    tags: [String!]!
  }
  type Query {
-     me: User
+     me: User,
+     listingPost(id: Int!): ListingAccommdation,
+     searchPost(input: String!): [ListingAccommdation] 
  }
  type Mutation {
     register(name: String!, email: String!, password: String!): Boolean!
     login(email: String!, password: String!): User
     forgotPassword(email: String!): Boolean!
     changePassword(token: String!, password: String!): Boolean!
-    createPost(input: HostInput): Boolean!
+    createPost(input: HostInput!): String!
+    deletePost(id: Int!): String!
  }
 `
 
