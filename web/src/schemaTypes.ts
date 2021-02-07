@@ -23,6 +23,33 @@ export interface MeQuery {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: CreatePostMutation
+// ====================================================
+
+export interface CreatePostMutation {
+  register: boolean;
+}
+
+export interface CreatePostMutationVariables {
+  name: string;
+  country: string;
+  city: string;
+  address: string;
+  price: number;
+  beds: string;
+  comment: string;
+  postalcode: string;
+  amenities?: string[] | null;
+  tags?: string[] | null;
+  images?: string[] | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: LoginMutation
 // ====================================================
 

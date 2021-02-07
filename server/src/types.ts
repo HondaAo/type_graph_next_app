@@ -21,9 +21,7 @@ export const typeDefs = gql`
     comment: String!
     price: Int!
     beds: Int!
-    guests: Int!
-    latitude: Float!
-    longitude: Float!
+    postalcode: String!
     amenities: [String!]!
     country: String!
     city: String!
@@ -33,13 +31,11 @@ export const typeDefs = gql`
  }
  input HostInput {
     name: String!
-    images: [String!]!
+    images: [String!]
     comment: String!
     price: Int!
     beds: Int!
-    guests: Int!
-    latitude: Float!
-    longitude: Float!
+    postalcode: String!
     amenities: [String!]!
     reviews: [Review]
     country: String!

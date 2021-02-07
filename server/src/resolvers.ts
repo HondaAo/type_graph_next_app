@@ -106,7 +106,7 @@ export const resolvers: IResolvers = {
  
             return true;
         },
-        createPost: async(_, {input: { images, name, country, city, address, comment, price, beds, guests, latitude, longitude, amenities, reviews, tags}}, { req }) => {
+        createPost: async(_, {input: { images, name, country, city, address, comment, price, beds, postalcode, amenities, reviews, tags}}, { req }) => {
            try {
             const imageUrls = await UploadImage(images)
              const host = await Host.create({
@@ -119,9 +119,7 @@ export const resolvers: IResolvers = {
                 comment, 
                 price, 
                 beds, 
-                guests, 
-                latitude, 
-                longitude, 
+                postalcode,
                 amenities, 
                 reviews, 
                 tags

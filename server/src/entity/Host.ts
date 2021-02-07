@@ -33,14 +33,8 @@ export class Host extends BaseEntity{
     @Column("int") 
     beds: number;
   
-    @Column("int") 
-    guests: number;
-  
-    @Column("double precision")
-    latitude: number;
-  
-    @Column("double precision") 
-    longitude: number;
+    @Column("text", { default: null })
+    postalcode: string;
   
     @Column("text", { array: true })
     amenities: string[];
@@ -50,4 +44,7 @@ export class Host extends BaseEntity{
 
     @Column("text", { array: true })
     tags: string[];
+
+    @Column("bool", { default: false })
+    isAuth: boolean;
 }
