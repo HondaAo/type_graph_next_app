@@ -23,11 +23,33 @@ export interface MeQuery {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: SearchQuery
+// ====================================================
+
+export interface SearchQuery_searchPost {
+  __typename: "ListingAccommdation";
+  name: string;
+  country: string;
+  city: string;
+  images: string[];
+  price: number;
+}
+
+export interface SearchQuery {
+  searchPost: (SearchQuery_searchPost | null)[] | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreatePostMutation
 // ====================================================
 
 export interface CreatePostMutation {
-  register: boolean;
+  createPost: string;
 }
 
 export interface CreatePostMutationVariables {
@@ -39,9 +61,9 @@ export interface CreatePostMutationVariables {
   beds: string;
   comment: string;
   postalcode: string;
-  amenities?: string[] | null;
-  tags?: string[] | null;
-  images?: string[] | null;
+  amenities: string[];
+  tags: string[];
+  files: string[];
 }
 
 /* tslint:disable */

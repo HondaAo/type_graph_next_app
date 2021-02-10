@@ -24,7 +24,7 @@ export class Host extends BaseEntity{
     @Column("text")
     comment: string;
 
-    @Column("text")
+    @Column("text", { array: true})
     images: string | string[];
 
     @Column("int") 

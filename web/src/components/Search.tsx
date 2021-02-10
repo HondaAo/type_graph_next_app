@@ -1,9 +1,22 @@
+import { gql } from 'apollo-boost';
 import React, { useState } from 'react' 
 import { GoSearch } from 'react-icons/go';
 
 interface SearchProps {
 
 }
+
+const SearchQuery = gql`
+  query SearchQuery {
+    searchPost {
+      name
+      country
+      city
+      images
+      price
+    }
+  }
+`
 
 export const Search: React.FC<SearchProps> = ({}) =>{
     const [ text, setText ] = useState("");

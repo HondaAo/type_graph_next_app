@@ -1,7 +1,7 @@
 import * as React from 'react' 
 import Head from "next/head";
 import Link from "next/link";
-// import { FaUser } from 'react-icons/fa'
+import { FaUser } from 'react-icons/fa'
 // import { MdMessage } from 'react-icons/md'
 // import { FiSearch } from 'react-icons/fi'
 import { gql } from 'apollo-boost';
@@ -56,9 +56,8 @@ const IsAuth = () => {
             }
             return (
                 <div className="flex mr-12" style={{ color: '#465280'}}>
-                  <Link href="/host"><a className="mr-8">Host</a></Link>
-                  <Link href="/user/account" ><a className="mr-8">Profile</a></Link>
-                  <Link href="/user/message" ><a className="mr-8">Message</a></Link>
+                  <Link href="/host"><a className="mr-8">Become a host</a></Link>
+                  <Link href="/user/account" ><a className="mr-8"><FaUser className="text-2xl" /></a></Link>
                 </div>   
             )
           }}
@@ -79,7 +78,7 @@ const Header = () => {
 
 const Footer = () => {
     return (
-        <div className="flex p-8 border border-gray-200 justify-between">
+        <div className="flex p-6 border border-gray-300 justify-between bg-gray-200">
             <div className="pl-24 font-extrabold">INVITE</div>
             <div className="flex pr-24">
                 <Link href="/"><a className="mr-12">Privacy</a></Link>

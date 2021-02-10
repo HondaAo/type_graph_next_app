@@ -24,6 +24,14 @@ export const resolvers: IResolvers = {
                return null
            }
         },
+        userToPost: async(_, { user_id }) => {
+            const hosts = await Host.find({ where: { user_id }})
+            if(hosts){
+                return hosts
+            }else{
+                return null
+            }
+        },
         searchPost: async(_, { input }) => {
             let hosts: Host[] = []
             try{
@@ -106,11 +114,10 @@ export const resolvers: IResolvers = {
  
             return true;
         },
-        createPost: async(_, {input: { images, name, country, city, address, comment, price, beds, postalcode, amenities, reviews, tags}}, { req }) => {
+        createPost: async(_, {input: { files, name, country, city, address, comment, price, beds, postalcode, amenities, tags}}, { req }) => {
            try {
-            const imageUrls = await UploadImage(images)
              const host = await Host.create({
-                images: imageUrls ,
+                images: files,
                 user_id: req.session.userId, 
                 name,
                 country, 
@@ -121,10 +128,11 @@ export const resolvers: IResolvers = {
                 beds, 
                 postalcode,
                 amenities, 
-                reviews, 
+                reviews: [], 
                 tags
              }).save()
-            return "Registerd";
+            console.log(host)
+            return "Registered"
            }catch(err){
              console.error(err)
              return `Error: ${err.message}`
@@ -140,6 +148,6 @@ export const resolvers: IResolvers = {
                console.error(err)
                return `Error: ${err.message}`
            }
-        }
+        },
     }
 }

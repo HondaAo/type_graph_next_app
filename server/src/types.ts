@@ -31,10 +31,10 @@ export const typeDefs = gql`
  }
  input HostInput {
     name: String!
-    images: [String!]
+    files: [String!]
     comment: String!
     price: Int!
-    beds: Int!
+    beds: String!
     postalcode: String!
     amenities: [String!]!
     reviews: [Review]
@@ -46,6 +46,7 @@ export const typeDefs = gql`
  type Query {
      me: User,
      listingPost(id: Int!): ListingAccommdation,
+     userToPost(user_id: Int!): ListingAccommdation,
      searchPost(input: String!): [ListingAccommdation] 
  }
  type Mutation {
@@ -55,6 +56,7 @@ export const typeDefs = gql`
     changePassword(token: String!, password: String!): Boolean!
     createPost(input: HostInput!): String!
     deletePost(id: Int!): String!
+    updatePost(input: HostInput): String!
  }
 `
 

@@ -31,7 +31,43 @@ export default function Home() {
         <h1 className="text-3xl">Lets search your favorite place.</h1>
         <Search />
         <h1>Suggested: Sourtheast Asia, Beach, Free-WiFi</h1>
+       </div>  
+     </div>
+     <div className="bg-gray-200">
+      <div className="container mx-auto flex">
+       <div className="w-1/4 p-6 my-8">
+         <h1 className="my-4 text-xl">ABOUT</h1>
+         <p className="my-2">How INVITE works</p>
+         <p className="my-2">NewsRoom</p>
+         <p className="my-2">Investors</p>
+         <p className="my-2">INVITE Plus</p>
+         <p className="my-2">Careers</p>
        </div>
+       <div className="w-1/4 p-6  my-8">
+         <h1 className="my-4 text-xl">COMMUNITY</h1>
+         <p className="my-2">Diversity & Belonging</p>
+         <p className="my-2">Against Discrimination</p>
+         <p className="my-2">Accessibility</p>
+         <p className="my-2">Invite friends</p>
+         <p className="my-2">Gift cards</p>
+       </div>
+       <div className="w-1/4 p-6  my-8">
+         <h1 className="my-4 text-xl">HOST</h1>
+         <p className="my-2">How INVITE works</p>
+         <p className="my-2">NewsRoom</p>
+         <p className="my-2">Investors</p>
+         <p className="my-2">INVITE Plus</p>
+         <p className="my-2">Careers</p>
+       </div>
+       <div className="w-1/4 p-6  my-8">
+         <h1 className="my-4 text-xl">SUPPORT</h1>
+         <p className="my-2">How INVITE works</p>
+         <p className="my-2">NewsRoom</p>
+         <p className="my-2">Investors</p>
+         <p className="my-2">INVITE Plus</p>
+         <p className="my-2">Careers</p>
+       </div>
+      </div>
      </div>
     </Layout>
   )

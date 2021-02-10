@@ -4,23 +4,29 @@ import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost'
 import { CreatePostMutation, CreatePostMutationVariables } from 'src/schemaTypes';
 import {useRouter} from 'next/router'
-import { Typeahead } from 'react-bootstrap-typeahead';
-interface hostProps {
-
+import axios from 'axios'
+import { Page2 } from 'src/components/Page2';
+import { Page3 } from 'src/components/Page3';
+import { Page1 } from 'src/components/Page1';
+interface HostTypes {
+    hashTags: {
+        customOption: boolean, 
+        label: string, 
+        id: string
+    }
 }
 
 const createPostMutation = gql`
- mutation CreatePostMutation($name: String!, $country: String!, $city: String!, $address: String!, $price: Int!, $beds: String!,$comment: String!, $postalcode: String!, $amenities: [String!], $tags: [String!], $images: [String!]) {
-    register(name: $name, country: $country, city: $city, address: $address, comment: $comment,  price: $price, beds: $beds, postalcode: $postalcode, amenities: $amenities, tags: $tags, images: $images)
+ mutation CreatePostMutation($name: String!, $country: String!, $city: String!, $address: String!, $price: Int!, $beds: String!,$comment: String!, $postalcode: String!, $amenities: [String!]!, $tags: [String!]!, $files: [String!]!) {
+    createPost(input: {name: $name, country: $country, city: $city, address: $address, comment: $comment,  price: $price, beds: $beds, postalcode: $postalcode, amenities: $amenities, tags: $tags, files: $files})
  }
 `
 
  
 
-const Host: React.FC<hostProps> = ({}) =>{
+const Host: React.FC<HostTypes> = ({}) =>{
     const [ page, setPage ] = useState(0);
     const [ name, setName ] = useState("");
-    const [ comment, setComment ] = useState("");
     const [ country, setCountry ] = useState("")
     const [ city, setCity ] = useState("")
     const [ address, setAdress ] = useState("")
@@ -28,26 +34,41 @@ const Host: React.FC<hostProps> = ({}) =>{
     const [ beds, setBeds ] = useState("2") 
     const [ postalcode, setPostalcode ] = useState("")
     const [ amenities, setAmenities ] = useState<string[]>([])
-    const [ tags, setTags ] = useState<string[]>([])
-    const [ images, setImages ] = useState<any>([null])
+    const [ comment, setComment ] = useState("");
+    const [ tags, setTags ] = useState<any>()
+    const [ images, setImages ] = useState<any>([])
     const [ message, setMessage] = useState("")
     const [ fileCount, setFileCount ] = useState(1)
     const router = useRouter()
-    const options = [ "Wi-fi", "TV", "Landry", "Air Conditionar", "Fridge"]
-    const checkImages = () => {
-        console.log(images)
-    }
     return (
        <Layout title="Register accomdations page">
        <Mutation<CreatePostMutation, CreatePostMutationVariables> mutation={createPostMutation}>
        {(mutate: any) => (
         <form onSubmit={async(e) => {
             e.preventDefault()
+            const formData = new FormData();
+            let files = [];
+            let hashTags = [];
+            for(let i=0; i < images.length; i++){
+                formData.append("file", images[i])
+                formData.append('upload_preset', 'g3hhlpdw');
+                console.log(formData)
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/yokohama-shi/image/upload`,
+                    formData,
+                );
+                files.push(response.data.url)
+            }
+            console.log( { name, country, city, address,  price, beds, comment, postalcode, amenities, tags, files })
+            for(let i=0; i < tags.length; i++){
+                hashTags.push(tags[i].label)
+            }
             const res = await mutate({
-                variables: { name, country, city, address,  price, beds, comment, postalcode, amenities, tags, images }
+                variables: { name, country, city, address,  price, beds, comment, postalcode, amenities, tags: hashTags, files }
             });
-            console.log(res)
+            setMessage("Loading....")
             if(res){
+              setMessage("")
               router.push("/user/account")  
             }else {
               setMessage("Something went wrong, please check again")
@@ -89,94 +110,39 @@ const Host: React.FC<hostProps> = ({}) =>{
                 </p>
             </div>
          </div>
-         <div className="text-center p-16">
+         <div className="p-16">
+             <div className="text-center mb-8">
              <p className="ml-6">_____________</p>
-             <h1 className="font-bold text-3xl">3 Steps to register your accommdation</h1>
+             <h1 className="font-bold text-4xl">3 Steps to register your accommdation</h1>
+             </div>
              <div className="flex">
-                 <div className=""></div>
-                 <div className=""></div>
-                 <div className=""></div>
+                 <div className="w-1/3 p-6">
+                     <h1 className="font-bold text-2xl">List your space for free</h1>
+                     <p>Share any space without sign-up charges, from a shared living room to a second home and everything in-between.</p>
+                 </div>
+                 <div className="w-1/3 p-6">
+                     <h1 className="font-bold text-2xl">Decide how you want to host</h1>
+                     <p>Choose your own schedule, prices, and requirements for guests. We’re there to help along the way.</p>
+                 </div>
+                 <div className="w-1/3 p-6">
+                      <h1 className="font-bold text-2xl">Welcome your first guest</h1>
+                     <p>Once your listing is live, qualified guests can reach out. You can message them with any questions before their stay.</p>
+                 </div>
              </div>
          </div>
         </div>
         )}
         { page === 1 && (
-            <div className="flex">
-                <div className="w-5/12">
-                    <img src="https://images.unsplash.com/photo-1595521624742-47e90260edab?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTR8fGd1ZXN0JTIwaG91c2V8ZW58MHwxfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" className="w-full h-auto" />
-                </div>
-                <div className="w-7/12 p-32">
-                    <h1>Step 1</h1>
-                    <input type="text" className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Name" onChange={(e) => setName(e.target.value)} value={name} />
-                    <input type="text" className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Postal code" onChange={(e) => setPostalcode(e.target.value)} value={postalcode} />
-                    <input className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Address" onChange={(e) => setAdress(e.target.value)} value={address}/>
-                    <button className="w-7/12 mx-auto p-2 bg-blue-500 text-white mt-2" onClick={(e) => setPage(prev => prev + 1 )}>Proceed to next stap</button>
-                    <button className="w-7/12 mx-auto p-2 bg-gray-500 text-white mt-2" onClick={() => setPage(prev => prev  - 1)}>Back </button>
-                </div>
-            </div>
+            <Page1 setPage={setPage} setName={setName} setAdress={setAdress} setPostalcode={setPostalcode} address={address} name={name} postalcode={postalcode} />
         )}
         { page === 2 && (
-            <div className="flex">
-                <div className="w-7/12 p-32">
-                 <h2>Step 2</h2>
-                 <input type="number" className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="price" value={price} onChange={(e) => setPrice(e.target.valueAsNumber)} />{"$"}
-                 <div className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2">
-                 <Typeahead placeholder="Choose several amenities..." multiple selected={amenities} onChange={setAmenities} options={options}  />
-                 </div>
-                 <textarea className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" onChange={(e) => setComment(e.target.value)} placeholder="other detail" ></textarea>
-                 <button className="w-7/12 mx-auto p-2 bg-blue-500 text-white mt-2" onClick={(e) => setPage(prev => prev + 1 )}>Proceed to next step</button>
-                 <button className="w-7/12 mx-auto p-2 bg-gray-500 text-white mt-2" onClick={() => setPage(prev => prev  - 1)}>Back </button>
-                </div>
-                <div className="w-5/12">
-                    <img src="https://images.unsplash.com/photo-1604040427842-0bdb35676f66?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTl8fGd1ZXN0JTIwaG91c2V8ZW58MHwxfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" className="w-full h-auto" />
-                </div>
-            </div>
+           <Page2 setPage={setPage} setPrice={setPrice} setAmenities={setAmenities} setComment={setComment} />
         )}
         { page === 3 && (
-            <div className="flex">
-                <div className="w-5/12">
-                    <img src="https://images.unsplash.com/photo-1592628824156-c6f2677d3bd5?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MzB8fGd1ZXN0JTIwaG91c2V8ZW58MHwxfDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" className="w-full h-auto" />
-                </div>
-                <div className="w-7/12 p-32">
-                 <input className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Tags" multiple  onChange={(e) => setTags([...tags, e.target.value ])} />
-                 <input className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Tags" multiple type="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setImages([...images, e.target.files[0].name])
-                 }}/>
-                 <div onClick={(e) => setFileCount(prev => prev + 1)}>Add File</div>
-                 { fileCount > 1 && (
-                     <>
-                       <input className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Tags" multiple type="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setImages([...images, e.target.files[0].name])
-                        console.log(images)
-                    }}/>
-                    <div onClick={(e) => setFileCount(prev => prev + 1)}>Add File</div>
-                    </>
-                 )}
-                 { fileCount > 2 && (
-                     <>
-                      <input className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Tags" multiple type="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setImages([...images, e.target.files[0].name])
-                        console.log(images)
-                    }}/>
-                     <div onClick={(e) => setFileCount(prev => prev + 1)}>Add File</div>
-                    </>
-                 )}
-                 { fileCount > 3 && (
-                     <>
-                      <input className="w-10/12 mx-auto border border-gray-200 box-shadow p-2 my-2" placeholder="Tags" multiple type="file" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setImages([...images, e.target.files[0].name])
-                        console.log(images)
-                    }} />
-                     <div onClick={() => checkImages}>Check Images</div>
-                    </>
-                 )}
 
-                 <button className="w-7/12 mx-auto p-2 bg-blue-500 text-white mt-2" type="submit">Register</button>
-                 <button className="w-7/12 mx-auto p-2 bg-gray-500 text-white mt-2" onClick={() => setPage(prev => prev  - 1)}>Back </button>
-                 {message && <div>{message}</div>}
-                </div>
-            </div>
+           <Page3 setPage={setPage} setImages={setImages} setFileCount={setFileCount} fileCount={fileCount} images={images} setTags={setTags} tags={tags} />
         )}
+        {message && <p>{message}</p>}
         </form>
         )}  
         </Mutation>
